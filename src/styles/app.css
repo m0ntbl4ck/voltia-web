@@ -789,6 +789,8 @@
 }
 
 .chart-data {
+  display: grid;
+  justify-items: center;
   margin-top: var(--space-3);
 }
 
@@ -799,8 +801,23 @@
 
 .chart-data .table {
   min-width: 0;
-  max-width: 420px;
-  margin-top: var(--space-2);
+  width: min(100%, 640px);
+  margin: var(--space-3) auto 0;
+}
+
+/* Days that fall inside an open anomaly take that anomaly's color, next to its chip. */
+.day-table tbody tr {
+  --mark: transparent;
+  background: color-mix(in srgb, var(--mark) 12%, var(--surface));
+}
+
+.day-table tbody tr[data-kind='critical'] { --mark: var(--critical); }
+.day-table tbody tr[data-kind='alert'] { --mark: var(--alert); }
+.day-table tbody tr[data-kind='data-quality'] { --mark: var(--data-quality); }
+.day-table tbody tr[data-kind='false-positive'] { --mark: var(--false-positive); }
+
+.day-table .dev {
+  border-radius: 0;
 }
 
 .detail-grid {
@@ -1125,9 +1142,12 @@ td.prio {
   background: var(--raised);
 }
 
-.heat-cell[data-tier='1'] { background: color-mix(in srgb, var(--alert) 22%, var(--surface)); }
-.heat-cell[data-tier='2'] { background: color-mix(in srgb, var(--alert) 42%, var(--surface)); }
-.heat-cell[data-tier='3'] { background: color-mix(in srgb, var(--critical) 55%, var(--surface)); }
+.heat-cell[data-tier='1'],
+.dev[data-tier='1'] { background: color-mix(in srgb, var(--alert) 22%, var(--surface)); }
+.heat-cell[data-tier='2'],
+.dev[data-tier='2'] { background: color-mix(in srgb, var(--alert) 42%, var(--surface)); }
+.heat-cell[data-tier='3'],
+.dev[data-tier='3'] { background: color-mix(in srgb, var(--critical) 55%, var(--surface)); }
 
 @media (max-width: 1100px) {
   .dash-grid {

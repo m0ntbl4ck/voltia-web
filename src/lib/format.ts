@@ -6,7 +6,9 @@ const signed = new Intl.NumberFormat('es-CO', {
 })
 
 export const formatInt = (n: number) => number.format(n)
-export const formatSignedPct = (n: number) => `${signed.format(n)}\u00a0%`
+// A change that rounds to zero carries no sign.
+export const formatSignedPct = (n: number) =>
+  Math.abs(n) < 0.05 ? '0,0\u00a0%' : `${signed.format(n)}\u00a0%`
 export const formatPct = (ratio: number) => `${number.format(ratio * 100)}\u00a0%`
 
 const day = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'short', timeZone: 'UTC' })

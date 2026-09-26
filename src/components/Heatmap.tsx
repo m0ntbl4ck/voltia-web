@@ -1,11 +1,7 @@
 import { Link } from 'react-router'
 import { formatDay, formatInt, formatSignedPct } from '../lib/format'
+import { tier } from '../lib/series'
 import type { Meter } from '../lib/types'
-
-const tier = (dev: number) => {
-  const a = Math.abs(dev)
-  return a >= 50 ? 3 : a >= 25 ? 2 : a >= 10 ? 1 : 0
-}
 
 /** Each cell is the meter's day against its own expected daily consumption. */
 export function Heatmap({ meters }: { meters: Meter[] }) {

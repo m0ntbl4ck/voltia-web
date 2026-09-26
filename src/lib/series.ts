@@ -18,3 +18,9 @@ export function countOutside(points: Point[], baseline: Baseline | null, variabl
   }).length
 }
 
+
+/** Intensity of a deviation from the expected level: 0 within 10 %, then 1, 2 and 3 at 10, 25 and 50 %. */
+export const tier = (dev: number) => {
+  const a = Math.abs(dev)
+  return a >= 50 ? 3 : a >= 25 ? 2 : a >= 10 ? 1 : 0
+}

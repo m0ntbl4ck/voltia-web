@@ -4,10 +4,10 @@ import { Link, useParams } from 'react-router'
 import { SeriesChart } from '../components/SeriesChart'
 import { Chip } from '../components/StatusChip'
 import { api, ApiError } from '../lib/api'
-import { formatDateTime, plantDate } from '../lib/plant'
-import { countOutside, VARIABLES } from '../lib/series'
+import { formatDateTime, plantDate, plantHour } from '../lib/plant'
+import { countOutside, tier, VARIABLES } from '../lib/series'
 import { anomalyKind, meterKind, meterLabel, SEVERITY_LABEL, TYPE_LABEL } from '../lib/status'
-import { formatDecimal, formatInt, formatPct, formatSignedPct } from '../lib/format'
+import { formatDay, formatDecimal, formatInt, formatPct, formatSignedPct } from '../lib/format'
 import type { MeterDetail as Detail, MeterEvent, Series, VariableKey } from '../lib/types'
 
 const EVENT_LABEL: Record<MeterEvent['type'], string> = {
@@ -37,16 +37,27 @@ export function MeterDetail() {
     [series.data, variable],
   )
   const daily = useMemo(() => {
-    const byDay = new Map<string, { sum: number; n: number }>()
+    const profile = series.data?.baseline?.profile[variable]
+    const byDay = new Map<string, { sum: number; expected: number; n: number }>()
     for (const p of series.data?.points ?? []) {
       const d = plantDate(p.timestamp)
-      const cur = byDay.get(d) ?? { sum: 0, n: 0 }
+      const cur = byDay.get(d) ?? { sum: 0, expected: 0, n: 0 }
       cur.sum += p[variable]
+      cur.expected += profile?.[plantHour(p.timestamp)].median ?? 0
       cur.n += 1
       byDay.set(d, cur)
     }
-    return [...byDay].map(([date, v]) => ({ date, value: variable === 'consumption_kwh' ? v.sum : v.sum / v.n }))
-  }, [series.data, variable])
+    const total = variable === 'consumption_kwh'
+    return [...byDay].map(([date, v]) => {
+      const value = total ? v.sum : v.sum / v.n
+      const expected = profile ? (total ? v.expected : v.expected / v.n) : null
+      const dev = expected ? ((value - expected) / expected) * 100 : null
+      const marks = (meter.data?.anomalies ?? []).filter(
+        (a) => plantDate(a.episode_start) <= date && date <= plantDate(a.episode_end),
+      )
+      return { date, value, expected, dev, marks }
+    })
+  }, [series.data, variable, meter.data])
 
   if (meter.isError) {
     const missing = meter.error instanceof ApiError && meter.error.status === 404
@@ -210,7 +221,10 @@ export function MeterDetail() {
             </p>
             <details className="chart-data">
               <summary>Ver los datos por día</summary>
-              <table className="table">
+              <table className="table day-table">
+                <caption className="visually-hidden">
+                  {meta.label} por día frente a lo esperado, con los días de anomalías abiertas marcados
+                </caption>
                 <thead>
                   <tr>
                     <th scope="col">Día</th>
@@ -218,15 +232,34 @@ export function MeterDetail() {
                       {meta.label}
                       {meta.unit && ` (${meta.unit}${variable === 'consumption_kwh' ? ' al día' : ', promedio'})`}
                     </th>
+                    {series.data.baseline && (
+                      <th scope="col" className="num">
+                        Frente a lo esperado
+                      </th>
+                    )}
+                    <th scope="col">Anomalía</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {daily.map((d) => (
-                    <tr key={d.date}>
-                      <th scope="row">{d.date}</th>
-                      <td className="num">{formatDecimal(d.value, meta.digits)}</td>
-                    </tr>
-                  ))}
+                  {daily.map((d) => {
+                    const top = d.marks[0]
+                    return (
+                      <tr key={d.date} data-kind={top ? anomalyKind(top.type, top.severity) : undefined}>
+                        <th scope="row">{formatDay(d.date)}</th>
+                        <td className="num">{formatDecimal(d.value, meta.digits)}</td>
+                        {series.data.baseline && (
+                          <td className="num dev" data-tier={d.dev === null ? 0 : tier(d.dev)}>
+                            {d.dev === null ? '' : formatSignedPct(d.dev)}
+                          </td>
+                        )}
+                        <td>
+                          {d.marks.map((a) => (
+                            <Chip key={a.id} kind={anomalyKind(a.type, a.severity)} label={TYPE_LABEL[a.type]} />
+                          ))}
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </details>
