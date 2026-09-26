@@ -28,7 +28,7 @@ npm run dev                  # http://localhost:5173
 
 Vite dirige `/api` al backend, así que el navegador ve un solo origen y la cookie de sesión funciona sin CORS. Para apuntar a otro servidor: `API_URL=http://otro:8080 npm run dev`.
 
-Si `VITE_DEMO_EMAIL` y `VITE_DEMO_PASSWORD` coinciden con la cuenta demo del backend, el formulario de entrada sale relleno y aparece "Entrar como demo". Sin ellas, el botón no se muestra.
+El formulario de entrada siempre sale vacío. Si `VITE_DEMO_EMAIL` y `VITE_DEMO_PASSWORD` coinciden con la cuenta demo del backend, aparece además el botón "Entrar como demo", que entra con esa cuenta sin escribirla. Sin las variables, el botón no se muestra.
 
 ## Despliegue en AWS Amplify
 

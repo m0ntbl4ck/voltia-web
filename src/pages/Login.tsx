@@ -13,8 +13,8 @@ export function Login() {
   const me = useMe()
   const login = useLogin()
   const navigate = useNavigate()
-  const [email, setEmail] = useState(demoEmail ?? '')
-  const [password, setPassword] = useState(demoPassword ?? '')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   if (me.data) return <Navigate to="/" replace />
 
