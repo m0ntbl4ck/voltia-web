@@ -15,6 +15,9 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
     res = await fetch(`/api/v1${path}`, {
       method,
       credentials: 'same-origin',
+      // Session data must not come from the browser cache, and this also skips a
+      // permanent redirect an earlier host setup left behind for the same URL.
+      cache: 'no-store',
       headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body),
     })
