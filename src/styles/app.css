@@ -134,6 +134,29 @@
   fill: var(--accent-focus);
 }
 
+/* Skip link: hidden until a keyboard user reaches it */
+.skip {
+  position: fixed;
+  left: var(--space-2);
+  top: var(--space-2);
+  z-index: 20;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip:focus {
+  transform: translateY(0);
+}
+
+.main:focus-visible {
+  outline-offset: -2px;
+}
+
 /* Shell */
 .shell {
   min-height: 100dvh;

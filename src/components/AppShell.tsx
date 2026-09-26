@@ -27,6 +27,16 @@ function Topbar() {
 export function AppShell() {
   return (
     <AnalysisProvider>
+      <a
+        className="skip"
+        href="#contenido"
+        onClick={(e) => {
+          e.preventDefault()
+          document.getElementById('contenido')?.focus()
+        }}
+      >
+        Saltar al contenido
+      </a>
       <div className="shell">
         <aside className="sidebar">
           <Logo to="/" />
@@ -43,7 +53,7 @@ export function AppShell() {
           </nav>
         </aside>
         <Topbar />
-        <main className="main">
+        <main className="main" id="contenido" tabIndex={-1}>
           <Outlet />
         </main>
       </div>

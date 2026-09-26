@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { lazy, Suspense, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { Breakdown } from '../components/Breakdown'
 import { Chip } from '../components/StatusChip'
@@ -45,6 +45,12 @@ export function Investigation() {
   const [variable, setVariable] = useState<VariableKey>('consumption_kwh')
   const [pending, setPending] = useState<Action | null>(null)
   const [note, setNote] = useState('')
+  const noteField = useRef<HTMLTextAreaElement>(null)
+
+  // Opening the confirm form moves focus into it; the buttons it replaces are gone.
+  useEffect(() => {
+    if (pending) noteField.current?.focus()
+  }, [pending])
 
   const anomaly = useQuery({
     queryKey: ['anomalies', anomalyId],
@@ -71,6 +77,7 @@ export function Investigation() {
       void qc.invalidateQueries({ queryKey: ['anomalies'] })
       setPending(null)
       setNote('')
+      requestAnimationFrame(() => document.getElementById('act-title')?.focus())
     },
   })
 
@@ -314,7 +321,9 @@ export function Investigation() {
 
         <aside className="invest-side">
           <section className="panel act" aria-labelledby="act-title">
-            <h2 id="act-title">Qué hacer</h2>
+            <h2 id="act-title" tabIndex={-1}>
+              Qué hacer
+            </h2>
             <p>{a.recommended_action}</p>
 
             {closed ? (
@@ -334,7 +343,7 @@ export function Investigation() {
                 </p>
                 <div className="field">
                   <label htmlFor="note">Nota (opcional)</label>
-                  <textarea id="note" rows={3} maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} />
+                  <textarea id="note" ref={noteField} rows={3} maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} />
                 </div>
                 {actionError && (
                   <div className="form-error" role="alert">
@@ -345,7 +354,15 @@ export function Investigation() {
                   <button type="submit" className="btn btn-primary" disabled={act.isPending}>
                     {act.isPending ? 'Aplicando…' : `Confirmar: ${ACTION_LABEL[pending].toLowerCase()}`}
                   </button>
-                  <button type="button" className="btn" onClick={() => setPending(null)} disabled={act.isPending}>
+                  <button
+                    type="button"
+                    className="btn"
+                    disabled={act.isPending}
+                    onClick={() => {
+                      setPending(null)
+                      requestAnimationFrame(() => document.querySelector<HTMLElement>(`[data-action="${pending}"]`)?.focus())
+                    }}
+                  >
                     Cancelar
                   </button>
                 </div>
@@ -353,12 +370,17 @@ export function Investigation() {
             ) : (
               <div className="act-buttons">
                 {a.recommended_next_action && (
-                  <button type="button" className="btn btn-primary" onClick={() => setPending(a.recommended_next_action)}>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-action={a.recommended_next_action}
+                    onClick={() => setPending(a.recommended_next_action)}
+                  >
                     {ACTION_LABEL[a.recommended_next_action]}
                   </button>
                 )}
                 {others.map((x) => (
-                  <button key={x} type="button" className="btn" onClick={() => setPending(x)}>
+                  <button key={x} type="button" className="btn" data-action={x} onClick={() => setPending(x)}>
                     {ACTION_LABEL[x]}
                   </button>
                 ))}
