@@ -1,4 +1,4 @@
-import type { AnomalyType, MeterStatus, Severity } from './types'
+import type { Action, AnomalyStatus, AnomalyType, MeterStatus, Severity } from './types'
 
 export type ChipKind = 'critical' | 'alert' | 'ok' | 'data-quality' | 'false-positive'
 
@@ -28,3 +28,44 @@ export const TYPE_LABEL: Record<AnomalyType, string> = {
 }
 
 export const SEVERITY_LABEL: Record<Severity, string> = { HIGH: 'Alta', MEDIUM: 'Media', LOW: 'Baja' }
+
+export const STATUS_LABEL: Record<AnomalyStatus, string> = {
+  OPEN: 'Abierta',
+  ACKNOWLEDGED: 'Reconocida',
+  RESOLVED: 'Resuelta',
+  DISMISSED: 'Descartada',
+}
+
+export const ACTION_LABEL: Record<Action, string> = {
+  CREATE_INSPECTION_ORDER: 'Crear orden de inspección',
+  REQUEST_METER_VALIDATION: 'Solicitar validación del medidor',
+  CONFIRM_OPERATION: 'Confirmar operación',
+  DISMISS: 'Descartar',
+  RESOLVE: 'Marcar como resuelta',
+}
+
+export const SIGNAL_LABEL: Record<string, string> = {
+  PERSISTENT_SHIFT: 'Cambio sostenido',
+  SPIKE: 'Pico o caída brusca',
+  OUTLIER: 'Lectura atípica',
+  ELECTRICAL_RELATION: 'Relación eléctrica',
+  DATA_QUALITY: 'Calidad de datos',
+  HOURLY_PATTERN: 'Patrón horario',
+  ISOLATION_FOREST: 'Isolation Forest',
+}
+
+export const CHECK_LABEL: Record<string, string> = {
+  power_factor_drop: 'caída del factor de potencia',
+  daily_correlation: 'correlación diaria',
+  night_day_ratio: 'relación noche y día',
+  electrical_jump: 'salto eléctrico',
+  impossible_value: 'valor imposible',
+  duplicate_timestamp: 'marca de tiempo repetida',
+  missing_readings: 'lecturas faltantes',
+}
+
+export const ROLE_LABEL = {
+  EXPLAINS: 'Explica la anomalía',
+  CORROBORATES: 'Respalda el diagnóstico',
+  NOT_EXPLANATORY: 'No la explica',
+} as const

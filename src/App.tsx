@@ -2,7 +2,9 @@ import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router'
 import { AppShell } from './components/AppShell'
 import { RequireAuth } from './components/RequireAuth'
+import { Anomalies } from './pages/Anomalies'
 import { Dashboard } from './pages/Dashboard'
+import { Investigation } from './pages/Investigation'
 import { Login } from './pages/Login'
 import { Meters } from './pages/Meters'
 
@@ -17,6 +19,8 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route index element={<Dashboard />} />
           <Route path="medidores" element={<Meters />} />
+          <Route path="anomalias" element={<Anomalies />} />
+          <Route path="anomalias/:anomalyId" element={<Investigation />} />
           <Route
             path="medidores/:meterId"
             element={

@@ -50,6 +50,7 @@ export interface Dashboard {
     confidence: number | null
   }
   period: { from: string; to: string }
+  attention: Anomaly[]
 }
 
 export type MeterStatus = 'ok' | 'alert' | 'critical'
@@ -126,4 +127,86 @@ export interface MeterEvent {
   timestamp: string
   description: string
   duration_hours: number | null
+}
+
+export type AnomalyStatus = 'OPEN' | 'ACKNOWLEDGED' | 'RESOLVED' | 'DISMISSED'
+export type Action =
+  | 'CREATE_INSPECTION_ORDER'
+  | 'REQUEST_METER_VALIDATION'
+  | 'CONFIRM_OPERATION'
+  | 'DISMISS'
+  | 'RESOLVE'
+
+export interface Anomaly {
+  id: string
+  meter_id: string
+  meter_name: string
+  location: string
+  anomaly: string
+  type: AnomalyType
+  severity: Severity
+  confidence: number
+  reason: string
+  recommended_action: string
+  priority: number
+  status: AnomalyStatus
+  ongoing: boolean
+  episode_start: string
+  episode_end: string
+  detected_at: string
+  recommended_next_action: Action | null
+  available_actions: Action[]
+  explanation_source: 'TEMPLATE' | 'LLM'
+  explanation_model: string
+}
+
+export interface Signal {
+  kind: string
+  check?: string
+  variable: VariableKey
+  start: string
+  end: string
+  hours: number
+  direction: number
+  observed: number
+  expected: number
+  mean_z: number
+}
+
+export interface EvidenceEvent extends MeterEvent {
+  role: 'EXPLAINS' | 'CORROBORATES' | 'NOT_EXPLANATORY'
+  offset_hours: number
+}
+
+export interface ActionEntry {
+  id: string
+  action: Action
+  note: string
+  from_status: AnomalyStatus
+  to_status: AnomalyStatus
+  user_name: string
+  created_at: string
+}
+
+export interface AnomalyDetail extends Anomaly {
+  investigation_steps: string[]
+  evidence: {
+    rule: string
+    duration_hours: number
+    direction: 'UP' | 'DOWN'
+    variation_pct: number
+    excess_kwh: number
+    invalid_readings: number
+    signals: Signal[]
+    events: EvidenceEvent[]
+  }
+  confidence_breakdown: {
+    detector_agreement: number
+    signal_strength: number
+    classification_clarity: number
+    data_integrity: number
+    integrity_applies: boolean
+  }
+  priority_breakdown: { severity: number; type: number; impact: number; recency: number }
+  actions: ActionEntry[]
 }
