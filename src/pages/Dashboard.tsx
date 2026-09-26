@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAnalysis } from '../components/Analysis'
+import { useAnalysis } from '../lib/use-analysis'
 import { api } from '../lib/api'
 import { formatDay, formatInt, formatPct, formatSignedPct } from '../lib/format'
 import type { Dashboard as DashboardData } from '../lib/types'

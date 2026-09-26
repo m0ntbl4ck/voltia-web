@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router'
 import { useLogout, useMe } from '../lib/auth'
-import { useAnalysis, AnalysisProvider } from './Analysis'
+import { useAnalysis } from '../lib/use-analysis'
+import { AnalysisProvider } from './Analysis'
 import { Logo } from './Logo'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -33,6 +34,7 @@ export function AppShell() {
             <NavLink to="/" end>
               Dashboard
             </NavLink>
+            <NavLink to="/medidores">Medidores</NavLink>
             <a href="/api/docs" target="_blank" rel="noreferrer">
               API docs
             </a>

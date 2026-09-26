@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -11,6 +9,7 @@ import {
 } from 'react'
 import { api, ApiError } from '../lib/api'
 import { formatInt, formatPct } from '../lib/format'
+import { AnalysisContext } from '../lib/use-analysis'
 import type { Run, Stage, StageName } from '../lib/types'
 
 const STAGE_LABEL: Record<StageName, string> = {
@@ -30,19 +29,6 @@ const STATE_LABEL: Record<Stage['status'], string> = {
 }
 
 const isActive = (run?: Run) => run?.status === 'PENDING' || run?.status === 'RUNNING'
-
-interface AnalysisControl {
-  running: boolean
-  run: () => void
-}
-
-const AnalysisContext = createContext<AnalysisControl | null>(null)
-
-export function useAnalysis() {
-  const ctx = useContext(AnalysisContext)
-  if (!ctx) throw new Error('useAnalysis needs AnalysisProvider')
-  return ctx
-}
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient()
