@@ -41,7 +41,7 @@ export function Login() {
       <div className="login-panel">
         <Logo />
         <div>
-          <h1>Entrar a Voltia</h1>
+          <h1>Entrar a VoltIA</h1>
           <p className="login-lead">Lecturas de medidores, anomalías y qué hacer con ellas.</p>
         </div>
         <form className="login-form" onSubmit={onSubmit} noValidate={false}>

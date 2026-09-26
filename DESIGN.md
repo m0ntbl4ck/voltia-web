@@ -1,4 +1,4 @@
-# DESIGN.md · Voltia
+# DESIGN.md · VoltIA
 
 > **Estado: aprobado por el dueño del proyecto (2026-09-26).**
 > Lo redactó Claude con `ui-ux-pro-max` y las skills de antislop, y el dueño delegó en Claude las decisiones abiertas de la sección 12. Cada decisión lleva su razón en una línea (R-31). Si una razón deja de convencer, se cambia la decisión, no la razón.
@@ -23,7 +23,7 @@
 - Sparkline de la tabla de medidores: la línea de 14 días con una raya punteada en el consumo esperado. El endpoint de la lista no entrega el ancho de la banda y no se inventa uno (R-38); la banda completa está en el detalle.
 - Desglose de confianza y prioridad: barras horizontales con marca de umbral, que se leen igual que la banda.
 
-Razón: si se cambia el nombre y el logo, la banda esperada sigue diciendo que esto es Voltia y no un panel genérico (R-20).
+Razón: si se cambia el nombre y el logo, la banda esperada sigue diciendo que esto es VoltIA y no un panel genérico (R-20).
 
 ## 3. Tema
 
@@ -189,7 +189,7 @@ Sin bucles, sin pulsos, sin entradas escalonadas al hacer scroll, sin animación
 
 El dueño delegó estas decisiones en Claude el 2026-09-26 (R-23). Quedan resueltas así:
 
-1. **Logo y wordmark:** wordmark "Voltia" en IBM Plex Sans 600 más un isotipo geométrico propio: una banda horizontal con un punto que sale de ella, el mismo motivo de la sección 2. Se dibuja como SVG de una sola forma, sin degradado. Razón: reutiliza la idea que organiza todo el diseño y no depende de un icono genérico.
+1. **Logo y wordmark:** wordmark "VoltIA" en IBM Plex Sans 600 (volt de voltio, IA de inteligencia artificial, con la I y la A en mayúscula) más un isotipo geométrico propio: una banda horizontal con un punto que sale de ella, el mismo motivo de la sección 2. Se dibuja como SVG de una sola forma, sin degradado. Razón: reutiliza la idea que organiza todo el diseño y no depende de un icono genérico.
 2. **Iconos:** sin librería de iconos. La navegación y las acciones van con texto, y el estado se marca con las cinco formas de severidad de la sección 4. Si una acción necesita un símbolo, se dibuja a mano como SVG con el trazo del isotipo. Razón: evita el aspecto de trazo fino redondeado que delata una librería por defecto (R-04) y no hay un icono que aporte más que la palabra.
 3. **Botón primario:** "Ejecutar análisis". Razón: la interfaz va en español y "AI" en el botón no informa nada.
 4. **Acento y alerta cercanos en tono:** se mantienen ámbar `#FFB81C` y naranja de alerta, separados por rol y por forma (sección 4). Si en pantalla se confunden, la alternativa es mover la alerta a un tono más rojizo. Razón: el ámbar viene acordado en la arquitectura y la forma más el texto ya evitan depender del tono.

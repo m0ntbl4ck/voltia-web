@@ -1,6 +1,6 @@
-# Voltia web
+# VoltIA web
 
-Interfaz de Voltia, la plataforma que convierte lecturas de medidores en decisiones de mantenimiento. Es una aplicación de React con Vite que consume la API del repositorio `voltia`.
+Interfaz de VoltIA, la plataforma que convierte lecturas de medidores en decisiones de mantenimiento. Es una aplicación de React con Vite que consume la API del repositorio `voltia`.
 
 La dirección visual, con sus razones, está en [`DESIGN.md`](DESIGN.md).
 

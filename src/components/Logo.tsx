@@ -14,11 +14,11 @@ export function Logo({ to }: { to?: string }) {
   const content = (
     <>
       <LogoMark />
-      <span>Voltia</span>
+      <span>VoltIA</span>
     </>
   )
   return to ? (
-    <Link to={to} className="logo" aria-label="Voltia, ir al dashboard">
+    <Link to={to} className="logo" aria-label="VoltIA, ir al dashboard">
       {content}
     </Link>
   ) : (
