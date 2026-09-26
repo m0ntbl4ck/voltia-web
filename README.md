@@ -30,6 +30,22 @@ Vite dirige `/api` al backend, así que el navegador ve un solo origen y la cook
 
 Si `VITE_DEMO_EMAIL` y `VITE_DEMO_PASSWORD` coinciden con la cuenta demo del backend, el formulario de entrada sale relleno y aparece "Entrar como demo". Sin ellas, el botón no se muestra.
 
+## Despliegue en AWS Amplify
+
+El repositorio trae `amplify.yml` con la compilación (`npm ci` y `npm run build`, salida en `dist`). Amplify solo necesita esto, en la consola de la aplicación:
+
+1. Variables de entorno de compilación: `VITE_DEMO_EMAIL` y `VITE_DEMO_PASSWORD`, con la cuenta pública de `.env.example`.
+2. Reescrituras y redirecciones, en este orden (la de `/api` va primero porque la segunda coge todo lo que no lleva punto):
+
+```json
+[
+  { "source": "/api/<*>", "target": "https://HOST_DE_LA_API/api/<*>", "status": "200", "condition": null },
+  { "source": "</^[^.]+$|\\.(?!(css|gif|ico|jpg|jpeg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|xml)$)([^.]+$)/>", "target": "/index.html", "status": "200", "condition": null }
+]
+```
+
+`HOST_DE_LA_API` es el nombre HTTPS de la instancia del backend (ver `deploy/aws` en el repositorio `voltia`). Amplify solo admite HTTPS en las reescrituras a otro dominio. Después de desplegar, entra como demo y comprueba que la sesión se conserva al recargar: eso confirma que la cookie atraviesa la reescritura.
+
 ## Scripts
 
 | Comando | Qué hace |
