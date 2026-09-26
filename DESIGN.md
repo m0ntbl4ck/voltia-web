@@ -20,7 +20,7 @@
 **Idea que organiza todo el diseño: la banda esperada.** El motor compara cada lectura contra una banda (mediana y MAD por hora y día). Toda la interfaz habla de "dentro o fuera de la banda". Ese es el motivo de identidad, y es un dato, no decoración:
 
 - Gráfica de detalle: banda sombreada con la línea de consumo encima; la zona fuera de banda toma el color de la severidad.
-- Sparkline de la tabla de medidores: la misma banda, en miniatura, detrás de la línea.
+- Sparkline de la tabla de medidores: la línea de 14 días con una raya punteada en el consumo esperado. El endpoint de la lista no entrega el ancho de la banda y no se inventa uno (R-38); la banda completa está en el detalle.
 - Desglose de confianza y prioridad: barras horizontales con marca de umbral, que se leen igual que la banda.
 
 Razón: si se cambia el nombre y el logo, la banda esperada sigue diciendo que esto es Voltia y no un panel genérico (R-20).
