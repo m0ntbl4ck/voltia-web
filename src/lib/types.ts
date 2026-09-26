@@ -49,7 +49,7 @@ export interface Dashboard {
     pending_high_priority: number
     confidence: number | null
   }
-  period: { from: string; to: string }
+  period: { from: string; to: string; daily: { date: string; kwh: number }[] }
   attention: Anomaly[]
 }
 

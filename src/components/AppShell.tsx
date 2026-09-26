@@ -36,6 +36,7 @@ export function AppShell() {
             </NavLink>
             <NavLink to="/medidores">Medidores</NavLink>
             <NavLink to="/anomalias">Anomalías IA</NavLink>
+            <NavLink to="/analisis">Análisis</NavLink>
             <a href="/api/docs" target="_blank" rel="noreferrer">
               API docs
             </a>

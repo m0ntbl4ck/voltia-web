@@ -1,8 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router'
+import { DailyBars } from '../components/DailyBars'
+import { Heatmap } from '../components/Heatmap'
+import { Chip } from '../components/StatusChip'
 import { useAnalysis } from '../lib/use-analysis'
 import { api } from '../lib/api'
 import { formatDay, formatInt, formatPct, formatSignedPct } from '../lib/format'
-import type { Dashboard as DashboardData } from '../lib/types'
+import { ACTION_LABEL, anomalyKind, SEVERITY_LABEL, TYPE_LABEL } from '../lib/status'
+import type { Dashboard as DashboardData, Meter } from '../lib/types'
 
 function Kpis({ data }: { data: DashboardData }) {
   const { kpis, period } = data
@@ -49,6 +54,69 @@ function Kpis({ data }: { data: DashboardData }) {
   )
 }
 
+function Attention({ items }: { items: DashboardData['attention'] }) {
+  return (
+    <section className="panel" aria-labelledby="att-title">
+      <div className="section-head">
+        <h2 id="att-title">Requiere atención</h2>
+        <Link to="/anomalias">Ver todas las anomalías</Link>
+      </div>
+      {items.length === 0 ? (
+        <p className="cell-muted">Ninguna anomalía abierta. Todo lo detectado ya se atendió.</p>
+      ) : (
+        <ol className="attention">
+          {items.map((a) => (
+            <li key={a.id}>
+              <span className="attention-prio" aria-label={`Prioridad ${a.priority}`}>
+                {a.priority}
+              </span>
+              <div>
+                <Chip kind={anomalyKind(a.type, a.severity)} label={TYPE_LABEL[a.type]} />
+                <p>
+                  <Link to={`/anomalias/${a.id}`}>
+                    <span className="mono">{a.meter_id}</span> {a.meter_name}
+                  </Link>
+                  : {a.anomaly}
+                </p>
+                <span className="cell-sub">
+                  Severidad {SEVERITY_LABEL[a.severity].toLowerCase()} ·{' '}
+                  {a.recommended_next_action ? ACTION_LABEL[a.recommended_next_action] : 'Sin acción pendiente'}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  )
+}
+
+function HeatmapPanel() {
+  const meters = useQuery({
+    queryKey: ['meters', 'heatmap'],
+    queryFn: () => api.get<Meter[]>('/meters?sort=severity&order=desc'),
+  })
+  return (
+    <section className="panel heat-panel" aria-labelledby="heat-title">
+      <h2 id="heat-title">Cada medidor frente a lo esperado, día por día</h2>
+      {meters.isPending && <div className="skeleton" style={{ minHeight: 200 }} aria-hidden="true" />}
+      {meters.isError && (
+        <p role="alert">
+          No se pudieron leer los medidores.{' '}
+          <button type="button" className="btn" onClick={() => void meters.refetch()}>
+            Reintentar
+          </button>
+        </p>
+      )}
+      {meters.data && <Heatmap meters={meters.data} />}
+      <p className="chart-legend">
+        Cada casilla es el consumo del día frente al esperado de ese medidor, en puntos porcentuales. Las casillas sin número
+        están dentro de ±10 %; la intensidad sube a ±25 % y a ±50 %. Un problema de calidad de datos no se ve aquí porque no cambia el consumo: está en Anomalías IA.
+      </p>
+    </section>
+  )
+}
+
 export function Dashboard() {
   const { run, running } = useAnalysis()
   const query = useQuery({
@@ -90,7 +158,22 @@ export function Dashboard() {
         </div>
       )}
 
-      {query.data?.has_analysis && <Kpis data={query.data} />}
+      {query.data?.has_analysis && (
+        <>
+          <Kpis data={query.data} />
+          <div className="dash-grid">
+            <Attention items={query.data.attention} />
+            <section className="panel" aria-labelledby="plant-title">
+              <h2 id="plant-title">Consumo diario de la planta</h2>
+              <DailyBars daily={query.data.period.daily} />
+              <p className="chart-legend">
+                Las dos últimas barras, resaltadas, son las que se comparan con lo esperado para calcular la variación.
+              </p>
+            </section>
+          </div>
+          <HeatmapPanel />
+        </>
+      )}
     </>
   )
 }

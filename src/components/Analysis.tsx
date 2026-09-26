@@ -54,6 +54,7 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       void qc.invalidateQueries({ queryKey: ['dashboard'] })
       void qc.invalidateQueries({ queryKey: ['meters'] })
       void qc.invalidateQueries({ queryKey: ['anomalies'] })
+      void qc.invalidateQueries({ queryKey: ['analysis', 'latest'] })
     }
   }, [finished, qc])
 
@@ -156,6 +157,10 @@ function AnalysisBody({
     return <p role="status">{starting ? 'Iniciando el análisis…' : 'Cargando el análisis…'}</p>
   }
 
+  return <RunView run={run} onRetry={onRetry} />
+}
+
+export function RunView({ run, onRetry }: { run: Run; onRetry?: () => void }) {
   const done = run.stages.filter((s) => s.status === 'DONE').length
   const running = run.stages.find((s) => s.status === 'RUNNING')
 
@@ -181,11 +186,13 @@ function AnalysisBody({
         <div className="form-error" role="alert">
           <div>
             <p>{run.summary?.error ?? 'El motor no pudo terminar.'}</p>
-            <p style={{ marginTop: 'var(--space-3)' }}>
-              <button type="button" className="btn" onClick={onRetry}>
-                Reintentar
-              </button>
-            </p>
+            {onRetry && (
+              <p style={{ marginTop: 'var(--space-3)' }}>
+                <button type="button" className="btn" onClick={onRetry}>
+                  Reintentar
+                </button>
+              </p>
+            )}
           </div>
         </div>
       )}
