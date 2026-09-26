@@ -1,0 +1,72 @@
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-ext-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-ext-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-sans/latin-ext-600.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+/* Values and contrast ratios are in DESIGN.md section 4. */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #121418;
+  --surface: #1a1d23;
+  --raised: #22262e;
+  --border: #2c313b;
+  --border-control: #6f7787;
+  --text: #e9ebef;
+  --text-muted: #a3aab8;
+  --accent: #ffb81c;
+  --on-accent: #14161a;
+  --accent-focus: #ffb81c;
+  --critical: #ff7a7a;
+  --alert: #ff9a3c;
+  --ok: #3dd68c;
+  --data-quality: #b49cff;
+  --false-positive: #98a0ae;
+  --scrim: rgb(8 9 11 / 0.6);
+  --shadow-float: 0 8px 24px rgb(0 0 0 / 0.45);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f3f2ee;
+  --surface: #ffffff;
+  --raised: #f8f7f4;
+  --border: #d8d5cc;
+  --border-control: #7a7f8a;
+  --text: #191c22;
+  --text-muted: #575d6a;
+  --accent: #ffb81c;
+  --on-accent: #14161a;
+  --accent-focus: #8a5200;
+  --critical: #b42323;
+  --alert: #964500;
+  --ok: #0b6e3d;
+  --data-quality: #5b3fc4;
+  --false-positive: #5a6270;
+  --scrim: rgb(25 28 34 / 0.45);
+  --shadow-float: 0 8px 24px rgb(25 28 34 / 0.18);
+}
+
+:root {
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius-chip: 2px;
+  --radius-control: 4px;
+  --radius-panel: 8px;
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --t-fast: 120ms;
+  --t-base: 180ms;
+}
