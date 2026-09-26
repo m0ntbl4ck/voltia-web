@@ -8,7 +8,7 @@ La dirección visual, con sus razones, está en [`DESIGN.md`](DESIGN.md).
 
 Las siete pantallas del acuerdo están hechas y conectadas a la API: login, dashboard (indicadores, lista de atención, consumo de la planta y mapa de calor por medidor y día), medidores, detalle con su banda esperada, anomalías, investigación con acciones y análisis con sus siete etapas.
 
-Comprobado en Chrome con un recorrido automático (login, filtros, orden, acciones, tema, 375 y 768 px sin desborde) y con axe-core, que no reporta violaciones WCAG 2.2 AA en ninguna pantalla, en oscuro ni en claro. axe no analiza el contraste dentro de las gráficas de canvas.
+Comprobado en Chrome con un recorrido automático (login, filtros, orden, acciones, tema, 375 y 768 px sin desborde) y con axe-core, que no reporta violaciones WCAG 2.2 AA en ninguna pantalla, en oscuro ni en claro. axe no analiza el contraste dentro de las gráficas de canvas. También se recorrió el flujo de la demo solo con teclado (login, análisis, filtros, detalle, acción con confirmación), se comprobó el hover de botones, filtros, filas y enlaces, y el mensaje de error de cada pantalla con el servidor apagado y su recuperación al reiniciarlo.
 
 Limitaciones conocidas:
 
